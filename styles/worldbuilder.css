@@ -1,0 +1,134 @@
+.scabard-worldbuilder {
+  --wb-accent: #4f46e5;
+}
+
+.scabard-worldbuilder .window-content {
+  padding: 0.5rem;
+}
+
+.scabard-worldbuilder__form {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5rem;
+}
+
+.scabard-worldbuilder__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.scabard-worldbuilder__tab {
+  border: 1px solid #888;
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+}
+
+.scabard-worldbuilder__tab.active {
+  border-color: var(--wb-accent);
+  box-shadow: inset 0 0 0 1px var(--wb-accent);
+}
+
+.scabard-worldbuilder__content {
+  overflow: auto;
+  padding-right: 0.3rem;
+}
+
+.scabard-worldbuilder__category.hidden {
+  display: none;
+}
+
+.scabard-worldbuilder__category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scabard-worldbuilder__category-header h2 {
+  margin: 0;
+}
+
+.scabard-worldbuilder__category-header .hint {
+  margin: 0.15rem 0 0;
+}
+
+.scabard-worldbuilder__entries {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.scabard-worldbuilder__entry {
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.scabard-worldbuilder__entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scabard-worldbuilder__entry-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.scabard-worldbuilder__entry label {
+  display: grid;
+  gap: 0.15rem;
+  font-weight: 600;
+}
+
+.scabard-worldbuilder__entry .hint {
+  font-weight: 400;
+  font-size: 0.85em;
+  opacity: 0.85;
+  margin: 0;
+}
+
+.scabard-worldbuilder__link-grid,
+.scabard-worldbuilder__family-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.scabard-worldbuilder__inferred {
+  border-top: 1px dashed #999;
+  margin-top: 0.25rem;
+  padding-top: 0.4rem;
+}
+
+.scabard-worldbuilder__inferred h4 {
+  margin: 0;
+}
+
+.scabard-worldbuilder__inferred ul {
+  margin: 0.25rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.scabard-worldbuilder__inferred em {
+  opacity: 0.7;
+}
+
+.scabard-worldbuilder__empty {
+  opacity: 0.8;
+  font-style: italic;
+}
+
+.scabard-worldbuilder__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.scabard-worldbuilder-open,
+.scabard-worldbuilder-settings-open {
+  width: 100%;
+  margin-top: 0.5rem;
+}
