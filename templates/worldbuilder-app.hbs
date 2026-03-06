@@ -1,0 +1,153 @@
+<form class="scabard-worldbuilder__form" autocomplete="off">
+  <nav class="scabard-worldbuilder__tabs">
+    {{#each categories as |category|}}
+      <button
+        type="button"
+        class="scabard-worldbuilder__tab {{#if category.active}}active{{/if}}"
+        data-action="switch-tab"
+        data-tab="{{category.key}}"
+      >
+        {{category.label}} ({{category.entries.length}})
+      </button>
+    {{/each}}
+  </nav>
+
+  <section class="scabard-worldbuilder__content">
+    {{#each categories as |category|}}
+      <div class="scabard-worldbuilder__category {{#unless category.active}}hidden{{/unless}}">
+        <header class="scabard-worldbuilder__category-header">
+          <h2>{{category.label}}</h2>
+          <button type="button" class="scabard-worldbuilder__add" data-action="add-entry" data-type="{{category.key}}">
+            <i class="fas fa-plus"></i> {{../addEntryLabel}}
+          </button>
+        </header>
+
+        {{#if category.entries.length}}
+          <div class="scabard-worldbuilder__entries">
+            {{#each category.entries as |entry index|}}
+              <article class="scabard-worldbuilder__entry">
+                <div class="scabard-worldbuilder__entry-header">
+                  <h3>#{{index}}</h3>
+                  <div class="scabard-worldbuilder__entry-actions">
+                    <button
+                      type="button"
+                      class="scabard-worldbuilder__import"
+                      data-action="import-linked"
+                      data-type="{{category.key}}"
+                      data-index="{{index}}"
+                    >
+                      <i class="fas fa-arrows-rotate"></i> {{../importLabel}}
+                    </button>
+                    <button
+                      type="button"
+                      class="scabard-worldbuilder__delete"
+                      data-action="delete-entry"
+                      data-type="{{category.key}}"
+                      data-index="{{index}}"
+                      title="Delete"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="scabard-worldbuilder__link-grid">
+                  <label>
+                    {{../fieldLabels.linkedActor}}
+                    <select name="{{category.key}}.{{index}}.linkedActorUuid">
+                      {{#each entry.actorOptions as |option|}}
+                        <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>
+                      {{/each}}
+                    </select>
+                    <p class="hint">{{../fieldHints.linkedActor}}</p>
+                  </label>
+
+                  <label>
+                    {{../fieldLabels.linkedJournal}}
+                    <select name="{{category.key}}.{{index}}.linkedJournalUuid">
+                      {{#each entry.journalOptions as |option|}}
+                        <option value="{{option.value}}" {{#if option.selected}}selected{{/if}}>{{option.label}}</option>
+                      {{/each}}
+                    </select>
+                    <p class="hint">{{../fieldHints.linkedJournal}}</p>
+                  </label>
+                </div>
+
+                <label>
+                  {{../fieldLabels.name}}
+                  <input type="text" name="{{category.key}}.{{index}}.name" value="{{entry.name}}" />
+                  <p class="hint">{{../fieldHints.name}}</p>
+                </label>
+
+                <label>
+                  {{../fieldLabels.summary}}
+                  <textarea rows="4" name="{{category.key}}.{{index}}.summary">{{entry.summary}}</textarea>
+                  <p class="hint">{{../fieldHints.summary}}</p>
+                </label>
+
+                <label>
+                  {{../fieldLabels.tags}}
+                  <input type="text" name="{{category.key}}.{{index}}.tags" value="{{entry.tags}}" />
+                  <p class="hint">{{../fieldHints.tags}}</p>
+                </label>
+
+                <label>
+                  {{../fieldLabels.links}}
+                  <textarea rows="2" name="{{category.key}}.{{index}}.links">{{entry.links}}</textarea>
+                  <p class="hint">{{../fieldHints.links}}</p>
+                </label>
+
+                {{#if category.supportsConnections}}
+                  <div class="scabard-worldbuilder__family-grid">
+                    <label>
+                      {{../fieldLabels.mother}}
+                      <input type="text" name="{{category.key}}.{{index}}.mother" value="{{entry.mother}}" />
+                      <p class="hint">{{../fieldHints.mother}}</p>
+                    </label>
+
+                    <label>
+                      {{../fieldLabels.father}}
+                      <input type="text" name="{{category.key}}.{{index}}.father" value="{{entry.father}}" />
+                      <p class="hint">{{../fieldHints.father}}</p>
+                    </label>
+                  </div>
+
+                  <label>
+                    {{../fieldLabels.connections}}
+                    <textarea rows="4" name="{{category.key}}.{{index}}.connections">{{entry.connections}}</textarea>
+                    <p class="hint">{{../fieldHints.connections}}</p>
+                    <p class="hint">{{../connectionFormatHint}}</p>
+                  </label>
+
+                  <section class="scabard-worldbuilder__inferred">
+                    <h4>{{../inferredConnectionsLabel}}</h4>
+                    {{#if entry.inferredConnections.length}}
+                      <ul>
+                        {{#each entry.inferredConnections as |connection|}}
+                          <li>
+                            <strong>{{connection.type}}</strong>: {{connection.target}}
+                            {{#unless connection.inferred}}<em>(direct)</em>{{/unless}}
+                          </li>
+                        {{/each}}
+                      </ul>
+                    {{else}}
+                      <p class="scabard-worldbuilder__empty">{{../noConnectionsLabel}}</p>
+                    {{/if}}
+                  </section>
+                {{/if}}
+              </article>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="scabard-worldbuilder__empty">No entries yet.</p>
+        {{/if}}
+      </div>
+    {{/each}}
+  </section>
+
+  <footer class="scabard-worldbuilder__footer">
+    <button type="submit" class="scabard-worldbuilder__save">
+      <i class="fas fa-save"></i> {{saveLabel}}
+    </button>
+  </footer>
+</form>
