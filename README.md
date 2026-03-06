@@ -16,6 +16,12 @@ This repository contains a Foundry VTT module that adds a lightweight worldbuild
   - Summary
   - Tags
   - Links (journal links, UUIDs, or URLs)
+- Character connection engine:
+  - Direct relationships via `relationship: target` lines.
+  - Parent fields (`Mother` / `Father`) that automatically create reverse `Child` links.
+  - Inferred sibling logic:
+    - Shared mother/father implies `Sibling`.
+    - Shared mother with different known fathers implies `Half-Sibling`.
 
 ## Development
 

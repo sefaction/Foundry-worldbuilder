@@ -59,6 +59,42 @@
                   {{../fieldLabels.links}}
                   <input type="text" name="{{category.key}}.{{index}}.links" value="{{entry.links}}" />
                 </label>
+
+                {{#if category.supportsConnections}}
+                  <div class="scabard-worldbuilder__family-grid">
+                    <label>
+                      {{../fieldLabels.mother}}
+                      <input type="text" name="{{category.key}}.{{index}}.mother" value="{{entry.mother}}" />
+                    </label>
+
+                    <label>
+                      {{../fieldLabels.father}}
+                      <input type="text" name="{{category.key}}.{{index}}.father" value="{{entry.father}}" />
+                    </label>
+                  </div>
+
+                  <label>
+                    {{../fieldLabels.connections}}
+                    <textarea rows="4" name="{{category.key}}.{{index}}.connections">{{entry.connections}}</textarea>
+                    <p class="hint">{{../connectionFormatHint}}</p>
+                  </label>
+
+                  <section class="scabard-worldbuilder__inferred">
+                    <h4>{{../inferredConnectionsLabel}}</h4>
+                    {{#if entry.inferredConnections.length}}
+                      <ul>
+                        {{#each entry.inferredConnections as |connection|}}
+                          <li>
+                            <strong>{{connection.type}}</strong>: {{connection.target}}
+                            {{#unless connection.inferred}}<em>(direct)</em>{{/unless}}
+                          </li>
+                        {{/each}}
+                      </ul>
+                    {{else}}
+                      <p class="scabard-worldbuilder__empty">{{../noConnectionsLabel}}</p>
+                    {{/if}}
+                  </section>
+                {{/if}}
               </article>
             {{/each}}
           </div>
