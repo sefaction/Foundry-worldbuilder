@@ -1,0 +1,22 @@
+{
+  "SCABARD-WORLDBUILDER": {
+    "AppTitle": "Worldbuilder Workspace",
+    "OpenButton": "Worldbuilder",
+    "AddEntry": "Add Entry",
+    "Save": "Save",
+    "Saved": "Worldbuilder data saved.",
+    "FieldsName": "Name",
+    "FieldsSummary": "Summary",
+    "FieldsTags": "Tags",
+    "FieldsLinks": "Links (journal links, UUIDs, or URLs)",
+    "CategoriesLocations": "Locations",
+    "CategoriesCharacters": "Characters",
+    "CategoriesFactions": "Factions",
+    "CategoriesPlots": "Plots",
+    "SettingsDataName": "Worldbuilder Data",
+    "SettingsDataHint": "Internal storage for Scabard-style worldbuilding records.",
+    "SettingsMenuName": "Worldbuilder Workspace",
+    "SettingsMenuLabel": "Open Workspace",
+    "SettingsMenuHint": "Open the worldbuilding workspace for this world."
+  }
+}
