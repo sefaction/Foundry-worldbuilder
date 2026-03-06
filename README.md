@@ -25,15 +25,20 @@ This repository contains a Foundry VTT module that adds a lightweight worldbuild
 
 ## Install/Update via Manifest URL (Foundry standard)
 
-Foundry supports automatic module install/update when your `module.json` includes valid `manifest` and `download` URLs.
+Foundry needs a **raw JSON** URL for module installation.
 
-This repo is configured with the **expected GitHub-hosted pattern**:
+- ❌ Wrong (GitHub HTML page):
+  - `https://github.com/sefaction/Foundry-worldbuilder/blob/main/module.json`
+- ✅ Correct (raw JSON):
+  - `https://raw.githubusercontent.com/sefaction/Foundry-worldbuilder/main/module.json`
 
-- `url`: `https://github.com/your-github-user/scabard-worldbuilder`
-- `manifest`: `https://raw.githubusercontent.com/your-github-user/scabard-worldbuilder/main/module.json`
-- `download`: `https://github.com/your-github-user/scabard-worldbuilder/releases/download/v0.2.1/scabard-worldbuilder.zip`
+If you use the `blob/...` URL, Foundry receives HTML (`<!DOCTYPE ...>`) instead of JSON and throws the parsing error you saw.
 
-Before publishing, replace `your-github-user` with your actual GitHub account/org and publish a matching release zip for each version.
+Current module metadata:
+
+- `url`: `https://github.com/sefaction/Foundry-worldbuilder`
+- `manifest`: `https://raw.githubusercontent.com/sefaction/Foundry-worldbuilder/main/module.json`
+- `download`: `https://github.com/sefaction/Foundry-worldbuilder/archive/refs/heads/main.zip`
 
 ## Development
 
