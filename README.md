@@ -11,11 +11,8 @@ This repository contains a Foundry VTT module that adds a lightweight worldbuild
   - Plots
 - Quick-open button in the Journal sidebar.
 - Config menu entry in Module Settings.
-- Structured entry fields:
-  - Name
-  - Summary
-  - Tags
-  - Links (journal links, UUIDs, or URLs)
+- Structured entry fields with built-in hints.
+- Actor/Journal linking so you can reuse data instead of repeating it.
 - Character connection engine:
   - Direct relationships via `relationship: target` lines.
   - Parent fields (`Mother` / `Father`) that automatically create reverse `Child` links.
@@ -32,13 +29,29 @@ Foundry needs a **raw JSON** URL for module installation.
 - ✅ Correct (raw JSON):
   - `https://raw.githubusercontent.com/sefaction/Foundry-worldbuilder/main/module.json`
 
-If you use the `blob/...` URL, Foundry receives HTML (`<!DOCTYPE ...>`) instead of JSON and throws the parsing error you saw.
+If you use the `blob/...` URL, Foundry receives HTML (`<!DOCTYPE ...>`) instead of JSON and throws a parse error.
 
 Current module metadata:
 
 - `url`: `https://github.com/sefaction/Foundry-worldbuilder`
 - `manifest`: `https://raw.githubusercontent.com/sefaction/Foundry-worldbuilder/main/module.json`
 - `download`: `https://github.com/sefaction/Foundry-worldbuilder/archive/refs/heads/main.zip`
+
+## Using linked Actors/Journals (recommended)
+
+Each record now has:
+
+- **Linked Actor** selector
+- **Linked Journal Entry** selector
+- **Import from Linked Docs** button
+
+Clicking import will:
+
+1. Pull summary-style text from the linked Actor or Journal into **Summary**.
+2. Add UUID links for linked docs into **Links**.
+3. Fill **Name** if empty.
+
+This lets you keep canonical information on Actor sheets / Journal pages and avoid entering the same text twice.
 
 ## Development
 

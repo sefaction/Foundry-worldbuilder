@@ -38,9 +38,7 @@ function parseConnections(raw) {
     .filter(Boolean)
     .map((line) => {
       const separator = line.indexOf(":");
-      if (separator < 0) {
-        return { type: "related", target: line };
-      }
+      if (separator < 0) return { type: "related", target: line };
 
       const type = line.slice(0, separator).trim() || "related";
       const target = line.slice(separator + 1).trim();
@@ -72,14 +70,7 @@ function addConnection(edgeIndex, source, type, target, inferred = true) {
 }
 
 function buildCharacterConnectionIndex(characters) {
-  const byName = new Map();
   const edges = new Map();
-
-  for (const character of characters) {
-    const name = String(character.name ?? "").trim();
-    if (!name) continue;
-    byName.set(normalizeName(name), character);
-  }
 
   for (const character of characters) {
     const source = String(character.name ?? "").trim();
@@ -101,9 +92,7 @@ function buildCharacterConnectionIndex(characters) {
     for (const connection of parseConnections(character.connections)) {
       addConnection(edges, source, connection.type, connection.target, false);
       const inverse = INVERSE_CONNECTIONS[normalizeName(connection.type)];
-      if (inverse) {
-        addConnection(edges, connection.target, inverse, source);
-      }
+      if (inverse) addConnection(edges, connection.target, inverse, source);
     }
   }
 
@@ -152,6 +141,44 @@ function buildCharacterConnectionIndex(characters) {
   return connectionIndex;
 }
 
+function stripHtml(value) {
+  const html = String(value ?? "");
+  if (!html.length) return "";
+  return $("<div>").html(html).text().trim();
+}
+
+function actorSummary(actor) {
+  const candidates = [
+    actor?.system?.details?.biography?.value,
+    actor?.system?.details?.biography,
+    actor?.system?.details?.publicNotes,
+    actor?.system?.details?.notes,
+    actor?.system?.biography,
+    actor?.prototypeToken?.name
+  ];
+
+  for (const candidate of candidates) {
+    const parsed = stripHtml(candidate);
+    if (parsed.length) return parsed;
+  }
+
+  return "";
+}
+
+function journalSummary(journal) {
+  const textPage = journal?.pages?.find((page) => page.type === "text");
+  const content = textPage?.text?.content ?? journal?.content;
+  return stripHtml(content);
+}
+
+function withSelected(options, selectedValue) {
+  return options.map((option) => ({ ...option, selected: option.value === selectedValue }));
+}
+
+function uuidLink(uuid, label) {
+  return `@UUID[${uuid}]{${label}}`;
+}
+
 class ScabardWorldbuilderApp extends FormApplication {
   constructor(object = {}, options = {}) {
     super(object, options);
@@ -164,8 +191,8 @@ class ScabardWorldbuilderApp extends FormApplication {
       id: "scabard-worldbuilder-app",
       classes: ["scabard-worldbuilder"],
       template: "modules/scabard-worldbuilder/templates/worldbuilder-app.hbs",
-      width: 900,
-      height: 700,
+      width: 980,
+      height: 760,
       title: game.i18n.localize("SCABARD-WORLDBUILDER.AppTitle"),
       submitOnClose: true,
       closeOnSubmit: false,
@@ -174,17 +201,34 @@ class ScabardWorldbuilderApp extends FormApplication {
   }
 
   getData() {
+    const actorOptions = [{ value: "", label: game.i18n.localize("SCABARD-WORLDBUILDER.NoLinkedActor") }].concat(
+      game.actors.contents
+        .map((actor) => ({ value: actor.uuid, label: actor.name }))
+        .sort((a, b) => a.label.localeCompare(b.label))
+    );
+
+    const journalOptions = [{ value: "", label: game.i18n.localize("SCABARD-WORLDBUILDER.NoLinkedJournal") }].concat(
+      game.journal.contents
+        .map((journal) => ({ value: journal.uuid, label: journal.name }))
+        .sort((a, b) => a.label.localeCompare(b.label))
+    );
+
     const characterConnections = buildCharacterConnectionIndex(this.worldData.characters || []);
 
     const categories = Object.entries(CATEGORY_CONFIG).map(([key, config]) => {
       const entries = (this.worldData[key] || []).map((entry) => {
-        if (!config.supportsConnections) return entry;
-
         const name = String(entry.name ?? "").trim();
-        return {
+        const mapped = {
           ...entry,
-          inferredConnections: characterConnections[normalizeName(name)] || []
+          actorOptions: withSelected(actorOptions, String(entry.linkedActorUuid ?? "")),
+          journalOptions: withSelected(journalOptions, String(entry.linkedJournalUuid ?? ""))
         };
+
+        if (config.supportsConnections) {
+          mapped.inferredConnections = characterConnections[normalizeName(name)] || [];
+        }
+
+        return mapped;
       });
 
       return {
@@ -203,12 +247,26 @@ class ScabardWorldbuilderApp extends FormApplication {
         summary: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsSummary"),
         tags: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsTags"),
         links: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsLinks"),
+        linkedActor: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsLinkedActor"),
+        linkedJournal: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsLinkedJournal"),
         mother: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsMother"),
         father: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsFather"),
         connections: game.i18n.localize("SCABARD-WORLDBUILDER.FieldsConnections")
       },
+      fieldHints: {
+        name: game.i18n.localize("SCABARD-WORLDBUILDER.HintName"),
+        summary: game.i18n.localize("SCABARD-WORLDBUILDER.HintSummary"),
+        tags: game.i18n.localize("SCABARD-WORLDBUILDER.HintTags"),
+        links: game.i18n.localize("SCABARD-WORLDBUILDER.HintLinks"),
+        linkedActor: game.i18n.localize("SCABARD-WORLDBUILDER.HintLinkedActor"),
+        linkedJournal: game.i18n.localize("SCABARD-WORLDBUILDER.HintLinkedJournal"),
+        mother: game.i18n.localize("SCABARD-WORLDBUILDER.HintMother"),
+        father: game.i18n.localize("SCABARD-WORLDBUILDER.HintFather"),
+        connections: game.i18n.localize("SCABARD-WORLDBUILDER.HintConnections")
+      },
       inferredConnectionsLabel: game.i18n.localize("SCABARD-WORLDBUILDER.InferredConnections"),
       noConnectionsLabel: game.i18n.localize("SCABARD-WORLDBUILDER.NoConnections"),
+      importLabel: game.i18n.localize("SCABARD-WORLDBUILDER.ImportFromLinks"),
       connectionFormatHint: game.i18n.localize("SCABARD-WORLDBUILDER.ConnectionFormatHint"),
       addEntryLabel: game.i18n.localize("SCABARD-WORLDBUILDER.AddEntry"),
       saveLabel: game.i18n.localize("SCABARD-WORLDBUILDER.Save")
@@ -221,6 +279,7 @@ class ScabardWorldbuilderApp extends FormApplication {
     html.find("[data-action='switch-tab']").on("click", this.#onSwitchTab.bind(this));
     html.find("[data-action='add-entry']").on("click", this.#onAddEntry.bind(this));
     html.find("[data-action='delete-entry']").on("click", this.#onDeleteEntry.bind(this));
+    html.find("[data-action='import-linked']").on("click", this.#onImportLinked.bind(this));
   }
 
   async _updateObject(_event, formData) {
@@ -241,7 +300,9 @@ class ScabardWorldbuilderApp extends FormApplication {
           name: String(row.name ?? ""),
           summary: String(row.summary ?? ""),
           tags: String(row.tags ?? ""),
-          links: String(row.links ?? "")
+          links: String(row.links ?? ""),
+          linkedActorUuid: String(row.linkedActorUuid ?? ""),
+          linkedJournalUuid: String(row.linkedJournalUuid ?? "")
         };
 
         if (key === "characters") {
@@ -273,7 +334,15 @@ class ScabardWorldbuilderApp extends FormApplication {
     const type = event.currentTarget.dataset.type;
     if (!type || !CATEGORY_CONFIG[type]) return;
 
-    const baseEntry = { name: "", summary: "", tags: "", links: "" };
+    const baseEntry = {
+      name: "",
+      summary: "",
+      tags: "",
+      links: "",
+      linkedActorUuid: "",
+      linkedJournalUuid: ""
+    };
+
     if (type === "characters") {
       baseEntry.mother = "";
       baseEntry.father = "";
@@ -294,6 +363,51 @@ class ScabardWorldbuilderApp extends FormApplication {
     this.worldData[type].splice(index, 1);
     this.activeTab = type;
     this.render();
+  }
+
+  async #onImportLinked(event) {
+    event.preventDefault();
+    const type = event.currentTarget.dataset.type;
+    const index = Number.parseInt(event.currentTarget.dataset.index, 10);
+    if (!type || !CATEGORY_CONFIG[type] || !Number.isInteger(index)) return;
+
+    const entry = this.worldData[type]?.[index];
+    if (!entry) return;
+
+    const actorUuid = String(entry.linkedActorUuid ?? "");
+    const journalUuid = String(entry.linkedJournalUuid ?? "");
+
+    const links = [];
+    if (actorUuid) {
+      const actor = await fromUuid(actorUuid);
+      if (actor) {
+        if (!String(entry.name ?? "").trim()) entry.name = actor.name;
+        const summary = actorSummary(actor);
+        if (summary.length) entry.summary = summary;
+        links.push(uuidLink(actor.uuid, actor.name));
+      }
+    }
+
+    if (journalUuid) {
+      const journal = await fromUuid(journalUuid);
+      if (journal) {
+        if (!String(entry.name ?? "").trim()) entry.name = journal.name;
+        const summary = journalSummary(journal);
+        if (summary.length) entry.summary = summary;
+        links.push(uuidLink(journal.uuid, journal.name));
+      }
+    }
+
+    if (links.length) {
+      const existing = String(entry.links ?? "").trim();
+      const merged = Array.from(new Set(existing.split(/\n+/).filter(Boolean).concat(links)));
+      entry.links = merged.join("\n");
+      ui.notifications.info(game.i18n.localize("SCABARD-WORLDBUILDER.ImportedFromLinks"));
+      this.render();
+      return;
+    }
+
+    ui.notifications.warn(game.i18n.localize("SCABARD-WORLDBUILDER.ImportMissingLink"));
   }
 }
 
