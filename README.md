@@ -23,6 +23,18 @@ This repository contains a Foundry VTT module that adds a lightweight worldbuild
     - Shared mother/father implies `Sibling`.
     - Shared mother with different known fathers implies `Half-Sibling`.
 
+## Install/Update via Manifest URL (Foundry standard)
+
+Foundry supports automatic module install/update when your `module.json` includes valid `manifest` and `download` URLs.
+
+This repo is configured with the **expected GitHub-hosted pattern**:
+
+- `url`: `https://github.com/your-github-user/scabard-worldbuilder`
+- `manifest`: `https://raw.githubusercontent.com/your-github-user/scabard-worldbuilder/main/module.json`
+- `download`: `https://github.com/your-github-user/scabard-worldbuilder/releases/download/v0.2.1/scabard-worldbuilder.zip`
+
+Before publishing, replace `your-github-user` with your actual GitHub account/org and publish a matching release zip for each version.
+
 ## Development
 
 No build step is required.
