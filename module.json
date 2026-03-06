@@ -1,0 +1,31 @@
+{
+  "id": "scabard-worldbuilder",
+  "title": "Scabard-Style Worldbuilder",
+  "description": "A lightweight worldbuilding workspace inspired by Scabard.com for Foundry VTT worlds.",
+  "version": "0.2.4",
+  "authors": [
+    {
+      "name": "Codex"
+    }
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "12"
+  },
+  "esmodules": [
+    "scripts/scabard-worldbuilder.js"
+  ],
+  "styles": [
+    "styles/worldbuilder.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "url": "https://github.com/sefaction/Foundry-worldbuilder",
+  "manifest": "https://raw.githubusercontent.com/sefaction/Foundry-worldbuilder/main/module.json",
+  "download": "https://github.com/sefaction/Foundry-worldbuilder/archive/refs/heads/main.zip"
+}
