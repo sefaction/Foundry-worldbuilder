@@ -297,6 +297,10 @@ class ScabardWorldbuilderApp extends FormApplication {
   }
 }
 
+function openWorldbuilder(activeTab = "characters") {
+  new ScabardWorldbuilderApp({}, { activeTab }).render(true);
+}
+
 Hooks.once("init", () => {
   game.settings.register(MODULE_ID, SETTING_WORLD_DATA, {
     name: "SCABARD-WORLDBUILDER.SettingsDataName",
@@ -318,7 +322,7 @@ Hooks.once("init", () => {
 });
 
 Hooks.on("renderJournalDirectory", (_app, html) => {
-  const footer = html.find(".directory-footer");
+  const footer = html.find(".directory-footer, .directory-footer.action-buttons").first();
   if (!footer.length || footer.find(".scabard-worldbuilder-open").length) return;
 
   const button = $(`
@@ -327,9 +331,38 @@ Hooks.on("renderJournalDirectory", (_app, html) => {
     </button>
   `);
 
-  button.on("click", () => {
-    new ScabardWorldbuilderApp().render(true);
-  });
+  button.on("click", () => openWorldbuilder("characters"));
 
   footer.append(button);
+});
+
+Hooks.on("renderSettings", (_app, html) => {
+  const settingsSection = html.find("#settings-game, .settings-sidebar, .settings-list").first();
+  if (!settingsSection.length || html.find(".scabard-worldbuilder-settings-open").length) return;
+
+  const button = $(`
+    <button type="button" class="scabard-worldbuilder-settings-open">
+      <i class="fas fa-book-atlas"></i> ${game.i18n.localize("SCABARD-WORLDBUILDER.OpenButton")}
+    </button>
+  `);
+
+  button.on("click", () => openWorldbuilder("characters"));
+  settingsSection.append(button);
+});
+
+Hooks.on("getSceneControlButtons", (controls) => {
+  const notesControl = controls.find((control) => control.name === "notes");
+  if (!notesControl) return;
+
+  notesControl.tools ??= [];
+  if (notesControl.tools.some((tool) => tool.name === "open-worldbuilder")) return;
+
+  notesControl.tools.push({
+    name: "open-worldbuilder",
+    title: "SCABARD-WORLDBUILDER.SceneControlOpen",
+    icon: "fas fa-book-atlas",
+    button: true,
+    visible: game.user?.isGM ?? false,
+    onClick: () => openWorldbuilder("characters")
+  });
 });

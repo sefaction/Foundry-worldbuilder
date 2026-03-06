@@ -46,7 +46,10 @@ No build step is required.
 
 1. Symlink this folder into your Foundry `Data/modules/` directory as `scabard-worldbuilder`.
 2. Enable the module in a world.
-3. Open **Journal** and click **Worldbuilder**.
+3. Open the module from any of these UI entry points:
+   - **Journal sidebar** footer button: **Worldbuilder**
+   - **Game Settings** tab button: **Worldbuilder**
+   - **Scene Controls → Notes** tool: **Open Worldbuilder**
 
 ## Next ideas
 

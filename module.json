@@ -2,7 +2,7 @@
   "id": "scabard-worldbuilder",
   "title": "Scabard-Style Worldbuilder",
   "description": "A lightweight worldbuilding workspace inspired by Scabard.com for Foundry VTT worlds.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "authors": [
     {
       "name": "Codex"
