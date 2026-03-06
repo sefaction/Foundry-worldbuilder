@@ -53,6 +53,15 @@ Clicking import will:
 
 This lets you keep canonical information on Actor sheets / Journal pages and avoid entering the same text twice.
 
+## Field meaning quick guide
+
+- **Name**: Display label for this worldbuilding record.
+- **Summary**: Human-readable overview text (importable from linked Actor/Journal).
+- **Tags**: Comma-separated keywords for filtering/searching.
+- **Links**: UUID links, journal links, or external URLs.
+- **Mother/Father** (characters only): Names used for inferred sibling/half-sibling logic.
+- **Connections** (characters only): `relationship: target` lines, for example `mentor: Aria`.
+
 ## Development
 
 No build step is required.

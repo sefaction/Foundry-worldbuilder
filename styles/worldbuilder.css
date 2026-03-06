@@ -45,6 +45,14 @@
   align-items: center;
 }
 
+.scabard-worldbuilder__category-header h2 {
+  margin: 0;
+}
+
+.scabard-worldbuilder__category-header .hint {
+  margin: 0.15rem 0 0;
+}
+
 .scabard-worldbuilder__entries {
   display: grid;
   gap: 0.75rem;

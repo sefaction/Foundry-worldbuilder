@@ -234,6 +234,7 @@ class ScabardWorldbuilderApp extends FormApplication {
       return {
         key,
         label: game.i18n.localize(config.label),
+        description: game.i18n.localize(`SCABARD-WORLDBUILDER.CategoryHelp.${key}`),
         entries,
         supportsConnections: Boolean(config.supportsConnections),
         active: key === this.activeTab
@@ -264,6 +265,16 @@ class ScabardWorldbuilderApp extends FormApplication {
         father: game.i18n.localize("SCABARD-WORLDBUILDER.HintFather"),
         connections: game.i18n.localize("SCABARD-WORLDBUILDER.HintConnections")
       },
+      fieldExamples: {
+        name: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleName"),
+        summary: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleSummary"),
+        tags: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleTags"),
+        links: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleLinks"),
+        mother: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleMother"),
+        father: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleFather"),
+        connections: game.i18n.localize("SCABARD-WORLDBUILDER.ExampleConnections")
+      },
+      understandingLabel: game.i18n.localize("SCABARD-WORLDBUILDER.UnderstandingLabel"),
       inferredConnectionsLabel: game.i18n.localize("SCABARD-WORLDBUILDER.InferredConnections"),
       noConnectionsLabel: game.i18n.localize("SCABARD-WORLDBUILDER.NoConnections"),
       importLabel: game.i18n.localize("SCABARD-WORLDBUILDER.ImportFromLinks"),

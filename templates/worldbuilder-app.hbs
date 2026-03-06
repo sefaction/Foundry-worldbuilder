@@ -16,7 +16,10 @@
     {{#each categories as |category|}}
       <div class="scabard-worldbuilder__category {{#unless category.active}}hidden{{/unless}}">
         <header class="scabard-worldbuilder__category-header">
-          <h2>{{category.label}}</h2>
+          <div>
+            <h2>{{category.label}}</h2>
+            <p class="hint">{{../understandingLabel}} {{category.description}}</p>
+          </div>
           <button type="button" class="scabard-worldbuilder__add" data-action="add-entry" data-type="{{category.key}}">
             <i class="fas fa-plus"></i> {{../addEntryLabel}}
           </button>
@@ -75,25 +78,25 @@
 
                 <label>
                   {{../fieldLabels.name}}
-                  <input type="text" name="{{category.key}}.{{index}}.name" value="{{entry.name}}" />
+                  <input type="text" name="{{category.key}}.{{index}}.name" value="{{entry.name}}" placeholder="{{../fieldExamples.name}}" />
                   <p class="hint">{{../fieldHints.name}}</p>
                 </label>
 
                 <label>
                   {{../fieldLabels.summary}}
-                  <textarea rows="4" name="{{category.key}}.{{index}}.summary">{{entry.summary}}</textarea>
+                  <textarea rows="4" name="{{category.key}}.{{index}}.summary" placeholder="{{../fieldExamples.summary}}">{{entry.summary}}</textarea>
                   <p class="hint">{{../fieldHints.summary}}</p>
                 </label>
 
                 <label>
                   {{../fieldLabels.tags}}
-                  <input type="text" name="{{category.key}}.{{index}}.tags" value="{{entry.tags}}" />
+                  <input type="text" name="{{category.key}}.{{index}}.tags" value="{{entry.tags}}" placeholder="{{../fieldExamples.tags}}" />
                   <p class="hint">{{../fieldHints.tags}}</p>
                 </label>
 
                 <label>
                   {{../fieldLabels.links}}
-                  <textarea rows="2" name="{{category.key}}.{{index}}.links">{{entry.links}}</textarea>
+                  <textarea rows="2" name="{{category.key}}.{{index}}.links" placeholder="{{../fieldExamples.links}}">{{entry.links}}</textarea>
                   <p class="hint">{{../fieldHints.links}}</p>
                 </label>
 
@@ -101,20 +104,20 @@
                   <div class="scabard-worldbuilder__family-grid">
                     <label>
                       {{../fieldLabels.mother}}
-                      <input type="text" name="{{category.key}}.{{index}}.mother" value="{{entry.mother}}" />
+                      <input type="text" name="{{category.key}}.{{index}}.mother" value="{{entry.mother}}" placeholder="{{../fieldExamples.mother}}" />
                       <p class="hint">{{../fieldHints.mother}}</p>
                     </label>
 
                     <label>
                       {{../fieldLabels.father}}
-                      <input type="text" name="{{category.key}}.{{index}}.father" value="{{entry.father}}" />
+                      <input type="text" name="{{category.key}}.{{index}}.father" value="{{entry.father}}" placeholder="{{../fieldExamples.father}}" />
                       <p class="hint">{{../fieldHints.father}}</p>
                     </label>
                   </div>
 
                   <label>
                     {{../fieldLabels.connections}}
-                    <textarea rows="4" name="{{category.key}}.{{index}}.connections">{{entry.connections}}</textarea>
+                    <textarea rows="4" name="{{category.key}}.{{index}}.connections" placeholder="{{../fieldExamples.connections}}">{{entry.connections}}</textarea>
                     <p class="hint">{{../fieldHints.connections}}</p>
                     <p class="hint">{{../connectionFormatHint}}</p>
                   </label>
