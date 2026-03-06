@@ -301,7 +301,34 @@ function openWorldbuilder(activeTab = "characters") {
   new ScabardWorldbuilderApp({}, { activeTab }).render(true);
 }
 
+function appendLauncherButton(html, selector) {
+  const section = html.find(selector).first();
+  if (!section.length || section.find(".scabard-worldbuilder-open").length) return false;
+
+  const button = $(`
+    <button type="button" class="scabard-worldbuilder-open">
+      <i class="fas fa-book-atlas"></i> ${game.i18n.localize("SCABARD-WORLDBUILDER.OpenButton")}
+    </button>
+  `);
+
+  button.on("click", () => openWorldbuilder("characters"));
+  section.append(button);
+  return true;
+}
+
 Hooks.once("init", () => {
+  game.keybindings.register(MODULE_ID, "openWorldbuilder", {
+    name: "SCABARD-WORLDBUILDER.KeybindingOpenName",
+    hint: "SCABARD-WORLDBUILDER.KeybindingOpenHint",
+    editable: [{ key: "KeyW", modifiers: ["Control", "Shift"] }],
+    onDown: () => {
+      if (!game.user?.isGM) return false;
+      openWorldbuilder("characters");
+      return true;
+    },
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+
   game.settings.register(MODULE_ID, SETTING_WORLD_DATA, {
     name: "SCABARD-WORLDBUILDER.SettingsDataName",
     hint: "SCABARD-WORLDBUILDER.SettingsDataHint",
@@ -321,33 +348,27 @@ Hooks.once("init", () => {
   });
 });
 
+Hooks.once("ready", () => {
+  const mod = game.modules.get(MODULE_ID);
+  if (mod) mod.api = { openWorldbuilder };
+});
+
 Hooks.on("renderJournalDirectory", (_app, html) => {
-  const footer = html.find(".directory-footer, .directory-footer.action-buttons").first();
-  if (!footer.length || footer.find(".scabard-worldbuilder-open").length) return;
-
-  const button = $(`
-    <button type="button" class="scabard-worldbuilder-open">
-      <i class="fas fa-book-atlas"></i> ${game.i18n.localize("SCABARD-WORLDBUILDER.OpenButton")}
-    </button>
-  `);
-
-  button.on("click", () => openWorldbuilder("characters"));
-
-  footer.append(button);
+  appendLauncherButton(html, ".directory-footer, .directory-footer.action-buttons");
 });
 
 Hooks.on("renderSettings", (_app, html) => {
-  const settingsSection = html.find("#settings-game, .settings-sidebar, .settings-list").first();
-  if (!settingsSection.length || html.find(".scabard-worldbuilder-settings-open").length) return;
+  appendLauncherButton(html, "#settings-game, .settings-sidebar, .settings-list");
+});
 
-  const button = $(`
-    <button type="button" class="scabard-worldbuilder-settings-open">
-      <i class="fas fa-book-atlas"></i> ${game.i18n.localize("SCABARD-WORLDBUILDER.OpenButton")}
-    </button>
-  `);
+Hooks.on("renderSidebarTab", (app, html) => {
+  if (app?.tabName === "journal") {
+    appendLauncherButton(html, ".directory-footer, .directory-footer.action-buttons");
+  }
 
-  button.on("click", () => openWorldbuilder("characters"));
-  settingsSection.append(button);
+  if (app?.tabName === "settings") {
+    appendLauncherButton(html, "#settings-game, .settings-sidebar, .settings-list");
+  }
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {

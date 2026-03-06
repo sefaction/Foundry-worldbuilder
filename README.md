@@ -50,6 +50,11 @@ No build step is required.
    - **Journal sidebar** footer button: **Worldbuilder**
    - **Game Settings** tab button: **Worldbuilder**
    - **Scene Controls → Notes** tool: **Open Worldbuilder**
+   - **Keyboard shortcut**: `Ctrl+Shift+W` (GM only)
+
+If you still cannot find the UI launcher, run this macro command as GM:
+
+`game.modules.get("scabard-worldbuilder")?.api?.openWorldbuilder("characters");`
 
 ## Next ideas
 

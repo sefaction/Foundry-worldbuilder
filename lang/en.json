@@ -3,6 +3,8 @@
     "AppTitle": "Worldbuilder Workspace",
     "OpenButton": "Worldbuilder",
     "SceneControlOpen": "Open Worldbuilder",
+    "KeybindingOpenName": "Open Worldbuilder",
+    "KeybindingOpenHint": "Open the Scabard-style Worldbuilder window.",
     "AddEntry": "Add Entry",
     "Save": "Save",
     "Saved": "Worldbuilder data saved.",
